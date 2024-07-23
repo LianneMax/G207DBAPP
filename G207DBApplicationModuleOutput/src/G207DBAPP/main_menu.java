@@ -39,18 +39,28 @@ public class main_menu {
             }
         }
 
-        if (menuselection == 1) {
-            product_management_menu pmm = new product_management_menu();
-            while (pmm.menu() != 0) {
-            }
-        }
-
         return menuselection;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         main_menu mm = new main_menu();
-        while (mm.menu() != 0) {
-        }
+        int selection;
+        do {
+            selection = mm.menu();
+            switch (selection) {
+                case 1:
+                    product_management_menu pmm = new product_management_menu();
+                    pmm.menu();
+                    break;
+                // Implement other cases here if needed
+                // case 2:
+                //    customer_management_menu cmm = new customer_management_menu();
+                //    cmm.menu();
+                //    break;
+                // Add more cases for each menu option
+            }
+        } while (selection != 0);
+
+        System.out.println("Exiting application.");
     }
 }

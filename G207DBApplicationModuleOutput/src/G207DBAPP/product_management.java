@@ -1,5 +1,4 @@
 package G207DBAPP;
-
 import java.sql.*;
 import java.util.Scanner;
 
@@ -14,7 +13,11 @@ public class product_management {
     public int quantityInStock;
     public float buyPrice;
     public float MSRP;
-    public boolean discontinued;
+
+    private final String[] validProductLines = {
+        "Classic Cars", "Motorcycles", "Planes", "Ships",
+        "Trains", "Trucks and Buses", "Vintage Cars"
+    };
 
     public product_management() {
         productCode = "";
@@ -26,14 +29,49 @@ public class product_management {
         quantityInStock = 0;
         buyPrice = 0;
         MSRP = 0;
-        discontinued = false;
+    }
+
+    public boolean isProductLineValid(String productLine) {
+        for (String validLine : validProductLines) {
+            if (validLine.equalsIgnoreCase(productLine)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isProductScaleValid(String productScale) {
+        return productScale.matches("\\d+:\\d+");
     }
 
     public int add_product() {
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?,?)");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            System.out.println("Connection to DB Successful");
+
+            // Check if the product already exists
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            checkStmt.setString(1, productCode);
+            ResultSet checkRs = checkStmt.executeQuery();
+            checkRs.next();
+            if (checkRs.getInt(1) > 0) {
+                System.out.println("This Product Already Exists");
+                return 0;
+            }
+            checkStmt.close();
+
+            if (!isProductLineValid(productLine)) {
+                System.out.println("Invalid Product Line");
+                return 0;
+            }
+
+            if (!isProductScaleValid(productScale)) {
+                System.out.println("Invalid Product Scale Format");
+                return 0;
+            }
+
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?)");
             pstmt.setString(1, productCode);
             pstmt.setString(2, productName);
             pstmt.setString(3, productLine);
@@ -43,7 +81,6 @@ public class product_management {
             pstmt.setInt(7, quantityInStock);
             pstmt.setFloat(8, buyPrice);
             pstmt.setFloat(9, MSRP);
-            pstmt.setBoolean(10, discontinued);
             System.out.println("SQL Statement Prepared");
             pstmt.executeUpdate();
             System.out.println("Record was created");
@@ -57,19 +94,34 @@ public class product_management {
     }
 
     public int update_product() {
-        if (get_product() == 0) {
-            System.out.println("That record does not exist");
-            return 0;
-        }
-        if (discontinued) {
-            System.out.println("This product is discontinued and cannot be updated.");
-            return 0;
-        }
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
             System.out.println("Connection to DB Successful");
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET productName=?, productLine=?, productScale=?, productDescription=?, productVendor=?, quantityInStock=?, buyPrice=?, MSRP=? WHERE productCode=?");
+
+            // Check if the product exists
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            checkStmt.setString(1, productCode);
+            ResultSet checkRs = checkStmt.executeQuery();
+            checkRs.next();
+            if (checkRs.getInt(1) == 0) {
+                System.out.println("This Product does not exist");
+                return 0;
+            }
+            checkStmt.close();
+
+            if (!isProductLineValid(productLine)) {
+                System.out.println("Invalid Product Line");
+                return 0;
+            }
+
+            if (!isProductScaleValid(productScale)) {
+                System.out.println("Invalid Product Scale Format");
+                return 0;
+            }
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                "UPDATE products SET productName=?, productLine=?, productScale=?, productDescription=?, productVendor=?, quantityInStock=?, buyPrice=?, MSRP=? WHERE productCode=?");
             pstmt.setString(9, productCode);
             pstmt.setString(1, productName);
             pstmt.setString(2, productLine);
@@ -92,25 +144,32 @@ public class product_management {
     }
 
     public int delete_product() {
-        if (get_product() == 0) {
-            System.out.println("That record does not exist");
-            return 0;
-        }
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
             System.out.println("Connection to DB Successful");
 
-            PreparedStatement pstmtCheck = conn.prepareStatement("SELECT COUNT(*) AS refCount FROM orderdetails WHERE productCode=?");
-            pstmtCheck.setString(1, productCode);
-            ResultSet rs = pstmtCheck.executeQuery();
-            if (rs.next() && rs.getInt("refCount") > 0) {
-                System.out.println("Cannot delete product as it is referenced in orders.");
-                pstmtCheck.close();
-                conn.close();
+            // Check if the product exists
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            checkStmt.setString(1, productCode);
+            ResultSet checkRs = checkStmt.executeQuery();
+            checkRs.next();
+            if (checkRs.getInt(1) == 0) {
+                System.out.println("This Product does not exist");
                 return 0;
             }
-            pstmtCheck.close();
+            checkStmt.close();
+
+            // Check if the product is referenced in orders
+            PreparedStatement refCheckStmt = conn.prepareStatement("SELECT COUNT(*) FROM orderdetails WHERE productCode=?");
+            refCheckStmt.setString(1, productCode);
+            ResultSet refCheckRs = refCheckStmt.executeQuery();
+            refCheckRs.next();
+            if (refCheckRs.getInt(1) > 0) {
+                System.out.println("This product cannot be deleted as it is referenced in other records");
+                return 0;
+            }
+            refCheckStmt.close();
 
             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM products WHERE productCode=?");
             pstmt.setString(1, productCode);
@@ -126,11 +185,43 @@ public class product_management {
         }
     }
 
+    public int discontinue_product() {
+        try {
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            System.out.println("Connection to DB Successful");
+
+            // Check if the product exists
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            checkStmt.setString(1, productCode);
+            ResultSet checkRs = checkStmt.executeQuery();
+            checkRs.next();
+            if (checkRs.getInt(1) == 0) {
+                System.out.println("This Product does not exist");
+                return 0;
+            }
+            checkStmt.close();
+
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET discontinued=? WHERE productCode=?");
+            pstmt.setBoolean(1, true);
+            pstmt.setString(2, productCode);
+            System.out.println("SQL Statement Prepared");
+            pstmt.executeUpdate();
+            System.out.println("Product was discontinued");
+            pstmt.close();
+            conn.close();
+            return 1;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 0;
+        }
+    }
+
     public int get_product() {
         int recordcount = 0;
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
             System.out.println("Connection to DB Successful");
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE productCode=?");
             pstmt.setString(1, productCode);
@@ -146,7 +237,6 @@ public class product_management {
                 quantityInStock = rs.getInt("quantityInStock");
                 buyPrice = rs.getFloat("buyPrice");
                 MSRP = rs.getFloat("MSRP");
-                discontinued = rs.getBoolean("discontinued");
                 System.out.println("Record was Retrieved");
             }
             pstmt.close();
@@ -158,21 +248,44 @@ public class product_management {
         }
     }
 
-    public int discontinue_product() {
-        if (get_product() == 0) {
-            System.out.println("That record does not exist");
-            return 0;
-        }
+    public int get_product_orders(int year) {
+        int recordcount = 0;
         try {
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET discontinued=? WHERE productCode=?");
-            pstmt.setBoolean(1, true);
-            pstmt.setString(2, productCode);
-            pstmt.executeUpdate();
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
+            System.out.println("Connection to DB Successful");
+
+            // Check if the product exists
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            checkStmt.setString(1, productCode);
+            ResultSet checkRs = checkStmt.executeQuery();
+            checkRs.next();
+            if (checkRs.getInt(1) == 0) {
+                System.out.println("This Product does not exist");
+                return 0;
+            }
+            checkStmt.close();
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                "SELECT orders.orderNumber, orders.orderDate, orders.status FROM orderdetails " +
+                "JOIN orders ON orderdetails.orderNumber = orders.orderNumber " +
+                "WHERE orderdetails.productCode = ? AND YEAR(orders.orderDate) = ?");
+            pstmt.setString(1, productCode);
+            pstmt.setInt(2, year);
+            System.out.println("SQL Statement Prepared");
+            ResultSet rs = pstmt.executeQuery();
+            System.out.println("Orders for Product Code: " + productCode + " in Year: " + year);
+            System.out.println("-------------------------------------------------------------------");
+            while (rs.next()) {
+                recordcount++;
+                System.out.println("Order Number: " + rs.getInt("orderNumber"));
+                System.out.println("Order Date: " + rs.getDate("orderDate"));
+                System.out.println("Order Status: " + rs.getString("status"));
+                System.out.println("-------------------------------------------------------------------");
+            }
             pstmt.close();
             conn.close();
-            return 1;
+            return recordcount;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return 0;
