@@ -62,5 +62,6 @@ public class main_menu {
         } while (selection != 0);
 
         System.out.println("Exiting application.");
+        System.exit(0);
     }
 }
