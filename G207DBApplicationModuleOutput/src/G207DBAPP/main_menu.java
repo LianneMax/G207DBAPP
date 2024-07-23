@@ -12,22 +12,20 @@ public class main_menu {
         Scanner console = new Scanner(System.in);
 
         while (menuselection < 0 || menuselection > 8) {
-            System.out.println("  ");
-            System.out.println("  ");
+            System.out.println();
             System.out.println("=======================================================");
-            System.out.println("    Application Main Menu");
-            System.out.println("-------------------------------------------------------");
-            System.out.println("[1] Product Management");
-            System.out.println("[2] Customer Management");
-            System.out.println("[3] Employee Management");
-            System.out.println("[4] Office Management");
-            System.out.println("[5] Order Processing");
-            System.out.println("[6] Payment Processing");
-            System.out.println("[7] Report Generation - Sales Report 1");
-            System.out.println("[8] Report Generation - Sales Report 2");
-            System.out.println("[0] Exit Application");
+            System.out.println("                   Application Main Menu               ");
             System.out.println("=======================================================");
-
+            System.out.println("|  [1] Product Management                              |");
+            System.out.println("|  [2] Customer Management                             |");
+            System.out.println("|  [3] Employee Management                             |");
+            System.out.println("|  [4] Office Management                               |");
+            System.out.println("|  [5] Order Processing                                |");
+            System.out.println("|  [6] Payment Processing                              |");
+            System.out.println("|  [7] Report Generation - Sales Report 1              |");
+            System.out.println("|  [8] Report Generation - Sales Report 2              |");
+            System.out.println("|  [0] Exit Application                                |");
+            System.out.println("=======================================================");
             System.out.print("Enter Selected Function: ");
 
             if (console.hasNextInt()) {
