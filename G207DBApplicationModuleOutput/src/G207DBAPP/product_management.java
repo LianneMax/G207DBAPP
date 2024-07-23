@@ -1,5 +1,5 @@
 package G207DBAPP;
-import java.sql;
+import java.sql.*;
 
 public class product_management {
 	
@@ -61,7 +61,7 @@ public class product_management {
 	public int update_product() {
 		try {
 			Connection conn;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbsales?useTimezone=true&serverTimezone=UTC&user=ccinfomstudentS11&password=DLSU1234!");
+			conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
 			System.out.println("Connection to DB Successful");
 			PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET productName=?, productLine=?, productScale=?, productDescription=?, productVendor=?, quantityInStock=?, buyPrice=?, MSRP=? WHERE productCode=?");
 			pstmt.setString(9, productCode);
@@ -88,7 +88,7 @@ public class product_management {
 	public int delete_product() {
 		try {
 			Connection conn;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbsales?useTimezone=true&serverTimezone=UTC&user=ccinfomstudentS11&password=DLSU1234!");
+			conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
 			System.out.println("Connection to DB Successful");
 			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM products WHERE productCode=?");
 			pstmt.setString(1, productCode);
@@ -108,7 +108,7 @@ public class product_management {
 		int recordcount = 0;
 		try {
 			Connection conn;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbsales?useTimezone=true&serverTimezone=UTC&user=ccinfomstudentS11&password=DLSU1234!");
+			conn = DriverManager.getConnection("jdbc:mysql://mysql-176128-0.cloudclusters.net:10107/dbsales?useTimezone=true&serverTimezone=UTC&user=CCINFOM_G207&password=DLSU1234");
 			System.out.println("Connection to DB Successful");
 			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE productCode=?");
 			pstmt.setString(1, productCode);
