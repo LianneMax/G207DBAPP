@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.Scanner;
 
 
+
 public class product_management_menu {
 
     public product_management_menu() {
@@ -58,10 +59,19 @@ public class product_management_menu {
             case 1:
                 // Adding a new Record, ask the user for the values of the record fields
                 System.out.println("Enter product information");
-                System.out.println("Product Code        : "); p.productCode = console.nextLine();
-                System.out.println("Product Name        : "); p.productName = console.nextLine();
+                System.out.print("Product Code        : ");
+                p.productCode = console.nextLine();
+
+                if (p.get_product() > 0) {
+                    System.out.println("This Product Already Exists");
+                    return;
+                }
+
+                System.out.print("Product Name        : ");
+                p.productName = console.nextLine();
                 while (true) {
-                    System.out.println("Product Line        : "); p.productLine = console.nextLine();
+                    System.out.print("Product Line        : ");
+                    p.productLine = console.nextLine();
                     if (!p.isProductLineValid(p.productLine)) {
                         System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
                     } else {
@@ -69,18 +79,21 @@ public class product_management_menu {
                     }
                 }
                 while (true) {
-                    System.out.println("Product Scale       : "); p.productScale = console.nextLine();
+                    System.out.print("Product Scale       : ");
+                    p.productScale = console.nextLine();
                     if (!p.isProductScaleValid(p.productScale)) {
                         System.out.println("Invalid Product Scale. Format should be n:n");
                     } else {
                         break;
                     }
                 }
-                System.out.println("Product Description : "); p.productDescription = console.nextLine();
-                System.out.println("Product Vendor      : "); p.productVendor = console.nextLine();
+                System.out.print("Product Description : ");
+                p.productDescription = console.nextLine();
+                System.out.print("Product Vendor      : ");
+                p.productVendor = console.nextLine();
                 while (true) {
                     try {
-                        System.out.println("Initial quantity    : "); 
+                        System.out.print("Initial quantity    : ");
                         p.quantityInStock = Integer.parseInt(console.nextLine());
                         if (p.quantityInStock < 0) {
                             throw new NumberFormatException();
@@ -92,7 +105,7 @@ public class product_management_menu {
                 }
                 while (true) {
                     try {
-                        System.out.println("Buy Price           : "); 
+                        System.out.print("Buy Price           : ");
                         p.buyPrice = Float.parseFloat(console.nextLine());
                         break;
                     } catch (NumberFormatException e) {
@@ -101,7 +114,7 @@ public class product_management_menu {
                 }
                 while (true) {
                     try {
-                        System.out.println("MSRP                : "); 
+                        System.out.print("MSRP                : ");
                         p.MSRP = Float.parseFloat(console.nextLine());
                         break;
                     } catch (NumberFormatException e) {
@@ -115,7 +128,8 @@ public class product_management_menu {
             case 2:
                 // Updating a Record
                 System.out.println("Enter product information");
-                System.out.println("Product Code        : "); p.productCode = console.nextLine();
+                System.out.print("Product Code        : ");
+                p.productCode = console.nextLine();
 
                 if (p.get_product() == 0) {
                     System.out.println("This Product does not exist");
@@ -134,9 +148,11 @@ public class product_management_menu {
 
                     System.out.println("Enter updated product information");
                     System.out.println("-------------------------------------------------------------------");
-                    System.out.println("Product Name        : "); p.productName = console.nextLine();
+                    System.out.print("Product Name        : ");
+                    p.productName = console.nextLine();
                     while (true) {
-                        System.out.println("Product Line        : "); p.productLine = console.nextLine();
+                        System.out.print("Product Line        : ");
+                        p.productLine = console.nextLine();
                         if (!p.isProductLineValid(p.productLine)) {
                             System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
                         } else {
@@ -144,18 +160,21 @@ public class product_management_menu {
                         }
                     }
                     while (true) {
-                        System.out.println("Product Scale       : "); p.productScale = console.nextLine();
+                        System.out.print("Product Scale       : ");
+                        p.productScale = console.nextLine();
                         if (!p.isProductScaleValid(p.productScale)) {
                             System.out.println("Invalid Product Scale. Format should be n:n");
                         } else {
                             break;
                         }
                     }
-                    System.out.println("Product Description : "); p.productDescription = console.nextLine();
-                    System.out.println("Product Vendor      : "); p.productVendor = console.nextLine();
+                    System.out.print("Product Description : ");
+                    p.productDescription = console.nextLine();
+                    System.out.print("Product Vendor      : ");
+                    p.productVendor = console.nextLine();
                     while (true) {
                         try {
-                            System.out.println("Initial quantity    : "); 
+                            System.out.print("Initial quantity    : ");
                             p.quantityInStock = Integer.parseInt(console.nextLine());
                             if (p.quantityInStock < 0) {
                                 throw new NumberFormatException();
@@ -167,7 +186,7 @@ public class product_management_menu {
                     }
                     while (true) {
                         try {
-                            System.out.println("Buy Price           : "); 
+                            System.out.print("Buy Price           : ");
                             p.buyPrice = Float.parseFloat(console.nextLine());
                             break;
                         } catch (NumberFormatException e) {
@@ -176,7 +195,7 @@ public class product_management_menu {
                     }
                     while (true) {
                         try {
-                            System.out.println("MSRP                : "); 
+                            System.out.print("MSRP                : ");
                             p.MSRP = Float.parseFloat(console.nextLine());
                             break;
                         } catch (NumberFormatException e) {
@@ -190,19 +209,22 @@ public class product_management_menu {
                 
             case 3:
                 System.out.println("Enter product information");
-                System.out.println("Product Code        : "); p.productCode = console.nextLine();        
+                System.out.print("Product Code        : ");
+                p.productCode = console.nextLine();        
                 p.delete_product();
                 break;
                 
             case 4:
                 System.out.println("Enter product information");
-                System.out.println("Product Code        : "); p.productCode = console.nextLine();        
+                System.out.print("Product Code        : ");
+                p.productCode = console.nextLine();        
                 p.discontinue_product();
                 break;
                 
             case 5:
                 System.out.println("Enter product information");
-                System.out.println("Product Code        : "); p.productCode = console.nextLine();
+                System.out.print("Product Code        : ");
+                p.productCode = console.nextLine();
 
                 if (p.get_product() == 0) {
                     System.out.println("This Product does not exist");
@@ -219,7 +241,7 @@ public class product_management_menu {
                     System.out.println("Buy Price           : " + p.buyPrice);
                     System.out.println("MSRP                : " + p.MSRP);
 
-                    System.out.println("Enter the year to view orders: ");
+                    System.out.print("Enter the year to view orders: ");
                     int year = Integer.parseInt(console.nextLine());
                     p.get_product_orders(year);
                 }
