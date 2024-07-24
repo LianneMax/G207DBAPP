@@ -16,17 +16,16 @@ public class product_management_menu {
         
         while (true) {
             // Display the Menu
-            System.out.println("  ");
-            System.out.println("  ");
+            System.out.println();
             System.out.println("=======================================================");
-            System.out.println("    Product Management Menu                             ");
-            System.out.println("-------------------------------------------------------");
-            System.out.println("[1] Create a New Product                                ");
-            System.out.println("[2] Update a Product Record                             ");
-            System.out.println("[3] Delete a Product Record                             ");
-            System.out.println("[4] Discontinue a Product                               ");
-            System.out.println("[5] View a Product Record                               ");
-            System.out.println("[0] Exit Product Management                             ");
+            System.out.println("                   Product Management Menu             ");
+            System.out.println("=======================================================");
+            System.out.println("|  [1] Create a New Product                            |");
+            System.out.println("|  [2] Update a Product Record                         |");
+            System.out.println("|  [3] Delete a Product Record                         |");
+            System.out.println("|  [4] Discontinue a Product                           |");
+            System.out.println("|  [5] View a Product Record                           |");
+            System.out.println("|  [0] Exit Product Management                         |");
             System.out.println("=======================================================");
 
             System.out.print("Enter Selected Function: ");

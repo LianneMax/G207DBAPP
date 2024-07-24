@@ -51,6 +51,10 @@ public class main_menu {
                     product_management_menu pmm = new product_management_menu();
                     pmm.menu();
                     break;
+                case 2:
+                    order_transaction_menu otm = new order_transaction_menu();
+                    otm.menu();
+                    break;
                 // Implement other cases here if needed
                 // case 2:
                 //    customer_management_menu cmm = new customer_management_menu();
