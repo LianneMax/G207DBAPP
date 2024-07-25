@@ -2,8 +2,6 @@ package G207DBAPP;
 import java.io.*;
 import java.util.Scanner;
 
-
-
 public class product_management_menu {
 
     public product_management_menu() {
@@ -56,195 +54,211 @@ public class product_management_menu {
         
         switch (menuselection) {
             case 1:
-                // Adding a new Record, ask the user for the values of the record fields
-                System.out.println("Enter product information");
-                System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();
-
-                if (p.get_product() > 0) {
-                    System.out.println("This Product Already Exists");
-                    return;
-                }
-
-                System.out.print("Product Name        : ");
-                p.productName = console.nextLine();
-                while (true) {
-                    System.out.print("Product Line        : ");
-                    p.productLine = console.nextLine();
-                    if (!p.isProductLineValid(p.productLine)) {
-                        System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
-                    } else {
-                        break;
-                    }
-                }
-                while (true) {
-                    System.out.print("Product Scale       : ");
-                    p.productScale = console.nextLine();
-                    if (!p.isProductScaleValid(p.productScale)) {
-                        System.out.println("Invalid Product Scale. Format should be n:n");
-                    } else {
-                        break;
-                    }
-                }
-                System.out.print("Product Description : ");
-                p.productDescription = console.nextLine();
-                System.out.print("Product Vendor      : ");
-                p.productVendor = console.nextLine();
-                while (true) {
-                    try {
-                        System.out.print("Initial quantity    : ");
-                        p.quantityInStock = Integer.parseInt(console.nextLine());
-                        if (p.quantityInStock < 0) {
-                            throw new NumberFormatException();
-                        }
-                        break;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
-                    }
-                }
-                while (true) {
-                    try {
-                        System.out.print("Buy Price           : ");
-                        p.buyPrice = Float.parseFloat(console.nextLine());
-                        break;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input for Buy Price. Please enter a valid number.");
-                    }
-                }
-                while (true) {
-                    try {
-                        System.out.print("MSRP                : ");
-                        p.MSRP = Float.parseFloat(console.nextLine());
-                        break;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input for MSRP. Please enter a valid number.");
-                    }
-                }
-                
-                p.add_product();
+                addProduct(console, p);
                 break;
-            
             case 2:
-                // Updating a Record
-                System.out.println("Enter product information");
-                System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();
-
-                if (p.get_product() == 0) {
-                    System.out.println("This Product does not exist");
-                } else {
-                    System.out.println("Current Product information");
-                    System.out.println("-------------------------------------------------------------------");
-                    System.out.println("Product Code        : " + p.productCode);
-                    System.out.println("Product Name        : " + p.productName);
-                    System.out.println("Product Line        : " + p.productLine);
-                    System.out.println("Product Scale       : " + p.productScale);
-                    System.out.println("Product Description : " + p.productDescription);
-                    System.out.println("Product Vendor      : " + p.productVendor);
-                    System.out.println("Initial quantity    : " + p.quantityInStock);
-                    System.out.println("Buy Price           : " + p.buyPrice);
-                    System.out.println("MSRP                : " + p.MSRP);
-
-                    System.out.println("Enter updated product information");
-                    System.out.println("-------------------------------------------------------------------");
-                    System.out.print("Product Name        : ");
-                    p.productName = console.nextLine();
-                    while (true) {
-                        System.out.print("Product Line        : ");
-                        p.productLine = console.nextLine();
-                        if (!p.isProductLineValid(p.productLine)) {
-                            System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
-                        } else {
-                            break;
-                        }
-                    }
-                    while (true) {
-                        System.out.print("Product Scale       : ");
-                        p.productScale = console.nextLine();
-                        if (!p.isProductScaleValid(p.productScale)) {
-                            System.out.println("Invalid Product Scale. Format should be n:n");
-                        } else {
-                            break;
-                        }
-                    }
-                    System.out.print("Product Description : ");
-                    p.productDescription = console.nextLine();
-                    System.out.print("Product Vendor      : ");
-                    p.productVendor = console.nextLine();
-                    while (true) {
-                        try {
-                            System.out.print("Initial quantity    : ");
-                            p.quantityInStock = Integer.parseInt(console.nextLine());
-                            if (p.quantityInStock < 0) {
-                                throw new NumberFormatException();
-                            }
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
-                        }
-                    }
-                    while (true) {
-                        try {
-                            System.out.print("Buy Price           : ");
-                            p.buyPrice = Float.parseFloat(console.nextLine());
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input for Buy Price. Please enter a valid number.");
-                        }
-                    }
-                    while (true) {
-                        try {
-                            System.out.print("MSRP                : ");
-                            p.MSRP = Float.parseFloat(console.nextLine());
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input for MSRP. Please enter a valid number.");
-                        }
-                    }
-                    
-                    p.update_product();
-                }
+                updateProduct(console, p);
                 break;
-                
             case 3:
-                System.out.println("Enter product information");
-                System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();        
-                p.delete_product();
+                deleteProduct(console, p);
                 break;
-                
             case 4:
-                System.out.println("Enter product information");
-                System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();        
-                p.discontinue_product();
+                discontinueProduct(console, p);
                 break;
-                
             case 5:
-                System.out.println("Enter product information");
-                System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();
+                viewProduct(console, p);
+                break;
+        }
+    }
 
-                if (p.get_product() == 0) {
-                    System.out.println("This Product does not exist");
-                } else {
-                    System.out.println("Current Product information");
-                    System.out.println("-------------------------------------------------------------------");
-                    System.out.println("Product Code        : " + p.productCode);
-                    System.out.println("Product Name        : " + p.productName);
-                    System.out.println("Product Line        : " + p.productLine);
-                    System.out.println("Product Scale       : " + p.productScale);
-                    System.out.println("Product Description : " + p.productDescription);
-                    System.out.println("Product Vendor      : " + p.productVendor);
-                    System.out.println("Initial quantity    : " + p.quantityInStock);
-                    System.out.println("Buy Price           : " + p.buyPrice);
-                    System.out.println("MSRP                : " + p.MSRP);
+    private void addProduct(Scanner console, product_management p) {
+        // Adding a new Record, ask the user for the values of the record fields
+        System.out.println("Enter product information");
+        System.out.print("Product Code        : ");
+        p.productCode = console.nextLine();
 
-                    System.out.print("Enter the year to view orders: ");
-                    int year = Integer.parseInt(console.nextLine());
-                    p.get_product_orders(year);
+        if (p.get_product() > 0) {
+            System.out.println("This Product Already Exists");
+            return;
+        }
+
+        System.out.print("Product Name        : ");
+        p.productName = console.nextLine();
+        while (true) {
+            System.out.print("Product Line        : ");
+            p.productLine = console.nextLine();
+            if (!p.isProductLineValid(p.productLine)) {
+                System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
+            } else {
+                break;
+            }
+        }
+        while (true) {
+            System.out.print("Product Scale       : ");
+            p.productScale = console.nextLine();
+            if (!p.isProductScaleValid(p.productScale)) {
+                System.out.println("Invalid Product Scale. Format should be n:n");
+            } else {
+                break;
+            }
+        }
+        System.out.print("Product Description : ");
+        p.productDescription = console.nextLine();
+        System.out.print("Product Vendor      : ");
+        p.productVendor = console.nextLine();
+        while (true) {
+            try {
+                System.out.print("Initial quantity    : ");
+                p.quantityInStock = Integer.parseInt(console.nextLine());
+                if (p.quantityInStock < 0) {
+                    throw new NumberFormatException();
                 }
                 break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
+            }
+        }
+        while (true) {
+            try {
+                System.out.print("Buy Price           : ");
+                p.buyPrice = Float.parseFloat(console.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for Buy Price. Please enter a valid number.");
+            }
+        }
+        while (true) {
+            try {
+                System.out.print("MSRP                : ");
+                p.MSRP = Float.parseFloat(console.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input for MSRP. Please enter a valid number.");
+            }
+        }
+        
+        p.add_product();
+    }
+
+    private void updateProduct(Scanner console, product_management p) {
+        // Updating a Record
+        System.out.println("Enter product information");
+        System.out.print("Product Code        : ");
+        p.productCode = console.nextLine();
+
+        if (p.get_product() == 0) {
+            System.out.println("This Product does not exist");
+        } else {
+            System.out.println("Current Product information");
+            System.out.println("-------------------------------------------------------------------");
+            System.out.println("Product Code        : " + p.productCode);
+            System.out.println("Product Name        : " + p.productName);
+            System.out.println("Product Line        : " + p.productLine);
+            System.out.println("Product Scale       : " + p.productScale);
+            System.out.println("Product Description : " + p.productDescription);
+            System.out.println("Product Vendor      : " + p.productVendor);
+            System.out.println("Initial quantity    : " + p.quantityInStock);
+            System.out.println("Buy Price           : " + p.buyPrice);
+            System.out.println("MSRP                : " + p.MSRP);
+
+            System.out.println("Enter updated product information");
+            System.out.println("-------------------------------------------------------------------");
+            System.out.print("Product Name        : ");
+            p.productName = console.nextLine();
+            while (true) {
+                System.out.print("Product Line        : ");
+                p.productLine = console.nextLine();
+                if (!p.isProductLineValid(p.productLine)) {
+                    System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
+                } else {
+                    break;
+                }
+            }
+            while (true) {
+                System.out.print("Product Scale       : ");
+                p.productScale = console.nextLine();
+                if (!p.isProductScaleValid(p.productScale)) {
+                    System.out.println("Invalid Product Scale. Format should be n:n");
+                } else {
+                    break;
+                }
+            }
+            System.out.print("Product Description : ");
+            p.productDescription = console.nextLine();
+            System.out.print("Product Vendor      : ");
+            p.productVendor = console.nextLine();
+            while (true) {
+                try {
+                    System.out.print("Initial quantity    : ");
+                    p.quantityInStock = Integer.parseInt(console.nextLine());
+                    if (p.quantityInStock < 0) {
+                        throw new NumberFormatException();
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
+                }
+            }
+            while (true) {
+                try {
+                    System.out.print("Buy Price           : ");
+                    p.buyPrice = Float.parseFloat(console.nextLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input for Buy Price. Please enter a valid number.");
+                }
+            }
+            while (true) {
+                try {
+                    System.out.print("MSRP                : ");
+                    p.MSRP = Float.parseFloat(console.nextLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input for MSRP. Please enter a valid number.");
+                }
+            }
+            
+            p.update_product();
+        }
+    }
+
+    private void deleteProduct(Scanner console, product_management p) {
+        System.out.println("Enter product information");
+        System.out.print("Product Code        : ");
+        p.productCode = console.nextLine();        
+        p.delete_product();
+    }
+
+    private void discontinueProduct(Scanner console, product_management p) {
+        System.out.println("Enter product information");
+        System.out.print("Product Code        : ");
+        p.productCode = console.nextLine();        
+        p.discontinue_product();
+    }
+
+    private void viewProduct(Scanner console, product_management p) {
+        System.out.println("Enter product information");
+        System.out.print("Product Code        : ");
+        p.productCode = console.nextLine();
+
+        if (p.get_product() == 0) {
+            System.out.println("This Product does not exist");
+        } else {
+            System.out.println("Current Product information");
+            System.out.println("-------------------------------------------------------------------");
+            System.out.println("Product Code        : " + p.productCode);
+            System.out.println("Product Name        : " + p.productName);
+            System.out.println("Product Line        : " + p.productLine);
+            System.out.println("Product Scale       : " + p.productScale);
+            System.out.println("Product Description : " + p.productDescription);
+            System.out.println("Product Vendor      : " + p.productVendor);
+            System.out.println("Initial quantity    : " + p.quantityInStock);
+            System.out.println("Buy Price           : " + p.buyPrice);
+            System.out.println("MSRP                : " + p.MSRP);
+
+            System.out.print("Enter the year to view orders: ");
+            int year = Integer.parseInt(console.nextLine());
+            p.get_product_orders(year);
         }
     }
 }

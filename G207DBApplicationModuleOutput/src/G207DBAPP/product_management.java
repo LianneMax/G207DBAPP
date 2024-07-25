@@ -2,7 +2,6 @@ package G207DBAPP;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class product_management {
 
@@ -67,8 +66,19 @@ public class product_management {
         return productScale.matches("\\d+:\\d+");
     }
 
+    // Method to check if the product is discontinued
+    public boolean isProductDiscontinued() {
+        return productDescription.contains(" - DISCONTINUED");
+    }
+
     // Method to add a new product to the database
     public int add_product() {
+        if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
+            System.out.println("---------------------------------------------");
+            System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
+            return 0; // Invalid values
+        }
+
         try {
             // Establish database connection
             Connection conn = DriverManager.getConnection(
@@ -130,6 +140,12 @@ public class product_management {
 
     // Method to update an existing product in the database
     public int update_product() {
+        if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
+            System.out.println("---------------------------------------------");
+            System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
+            return 0; // Invalid values
+        }
+
         try {
             // Establish database connection
             Connection conn = DriverManager.getConnection(
@@ -137,14 +153,19 @@ public class product_management {
             System.out.println("\nConnection to DB Successful\n");
 
             // Check if the product exists
-            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            checkRs.next();
-            if (checkRs.getInt(1) == 0) {
+            if (!checkRs.next()) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
+            }
+            productDescription = checkRs.getString("productDescription");
+            if (isProductDiscontinued()) {
+                System.out.println("---------------------------------------------");
+                System.out.println("Discontinued Products cannot be updated\n");
+                return 0; // Product is discontinued
             }
             checkStmt.close();
 
@@ -199,14 +220,19 @@ public class product_management {
             System.out.println("\nConnection to DB Successful\n");
 
             // Check if the product exists
-            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            checkRs.next();
-            if (checkRs.getInt(1) == 0) {
+            if (!checkRs.next()) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
+            }
+            productDescription = checkRs.getString("productDescription");
+            if (isProductDiscontinued()) {
+                System.out.println("---------------------------------------------");
+                System.out.println("Discontinued Products cannot be deleted\n");
+                return 0; // Product is discontinued
             }
             checkStmt.close();
 
@@ -250,20 +276,25 @@ public class product_management {
             System.out.println("\nConnection to DB Successful\n");
 
             // Check if the product exists
-            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM products WHERE productCode=?");
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            checkRs.next();
-            if (checkRs.getInt(1) == 0) {
+            if (!checkRs.next()) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
             }
+            productDescription = checkRs.getString("productDescription");
+            if (isProductDiscontinued()) {
+                System.out.println("---------------------------------------------");
+                System.out.println("Product is already discontinued\n");
+                return 0; // Product is already discontinued
+            }
             checkStmt.close();
 
             // Prepare SQL statement to mark product as discontinued
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET discontinued=? WHERE productCode=?");
-            pstmt.setBoolean(1, true);
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE products SET productDescription=? WHERE productCode=?");
+            pstmt.setString(1, productDescription + " - DISCONTINUED");
             pstmt.setString(2, productCode);
             System.out.println("SQL Statement Prepared\n");
 
@@ -315,8 +346,8 @@ public class product_management {
                 System.out.println("Product Description : " + productDescription);
                 System.out.println("Product Vendor      : " + productVendor);
                 System.out.println("Initial quantity    : " + quantityInStock);
-                System.out.println("Buy Price           : " + buyPrice);
-                System.out.println("MSRP                : " + MSRP);
+                System.out.println("Buy Price           : " + String.format("%.2f", buyPrice));
+                System.out.println("MSRP                : " + String.format("%.2f", MSRP));
                 System.out.println("---------------------------------------------\n");
             }
 
