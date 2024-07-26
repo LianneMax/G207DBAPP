@@ -205,9 +205,4 @@ public class order_transaction_menu {
         System.out.print(prompt);
         return console.nextLine();
     }
-
-    public static void main(String args[]) {
-        order_transaction_menu otm = new order_transaction_menu();
-        otm.menu();
-    }
 }
