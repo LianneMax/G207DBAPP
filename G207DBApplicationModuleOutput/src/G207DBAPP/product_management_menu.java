@@ -63,7 +63,7 @@ public class product_management_menu {
                 deleteProduct(console, p);
                 break;
             case 4:
-                discontinueProduct(console, p);
+                discontinueProduct(console, p); // fix
                 break;
             case 5:
                 viewProduct(console, p);

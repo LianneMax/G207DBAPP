@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class product_management {
-
+	
     // Product attributes
     public String productCode;
     public String productName;
@@ -66,7 +66,7 @@ public class product_management {
         return productScale.matches("\\d+:\\d+");
     }
 
-    // Method to check if the product is discontinued
+    // Method to check if the product is discontinued - add fix
     public boolean isProductDiscontinued() {
         return productDescription.contains(" - DISCONTINUED");
     }
