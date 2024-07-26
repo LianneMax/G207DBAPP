@@ -1,16 +1,18 @@
 package G207DBAPP;
 import java.io.*;
 import java.util.Scanner;
+import java.util.List;
 
 public class product_management_menu {
 
     public product_management_menu() {
+
     }
-    
+
     public int menu() {
         int menuselection = -1;
         Scanner console = new Scanner(System.in);
-        
+
         while (true) {
             // Display the Menu
             System.out.println();
@@ -27,7 +29,7 @@ public class product_management_menu {
 
             System.out.print("Enter Selected Function: ");
             String input = console.nextLine();
-            
+
             try {
                 menuselection = Integer.parseInt(input);
                 if (menuselection < 0 || menuselection > 5) {
@@ -38,19 +40,19 @@ public class product_management_menu {
                 System.out.println("Invalid input. Please enter a valid number.");
                 continue;
             }
-            
+
             if (menuselection == 0) {
                 break;  // Exit the menu
             }
-            
+
             performMenuAction(menuselection, console);
         }
         return menuselection;
     }
-    
+
     private void performMenuAction(int menuselection, Scanner console) {
         product_management p = new product_management();
-        
+
         switch (menuselection) {
             case 1:
                 // Adding a new Record, ask the user for the values of the record fields
@@ -69,7 +71,11 @@ public class product_management_menu {
                     System.out.print("Product Line        : ");
                     p.productLine = console.nextLine();
                     if (!p.isProductLineValid(p.productLine)) {
-                        System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
+                        System.out.println("Invalid Product Line. Valid options are:");
+                        List<String> validProductLines = p.getValidProductLines();
+                        for (String productLine : validProductLines) {
+                            System.out.println(productLine);
+                        }
                     } else {
                         break;
                     }
@@ -92,10 +98,9 @@ public class product_management_menu {
                         System.out.print("Initial quantity    : ");
                         p.quantityInStock = Integer.parseInt(console.nextLine());
                         if (p.quantityInStock < 0) {
-                            System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
-                        } else {
-                            break;
+                            throw new NumberFormatException();
                         }
+                        break;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
                     }
@@ -105,12 +110,11 @@ public class product_management_menu {
                         System.out.print("Buy Price           : ");
                         p.buyPrice = Float.parseFloat(console.nextLine());
                         if (p.buyPrice < 0) {
-                            System.out.println("Invalid input for Buy Price. Please enter a valid non-negative number.");
-                        } else {
-                            break;
+                            throw new NumberFormatException();
                         }
+                        break;
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid input for Buy Price. Please enter a valid non-negative number.");
+                        System.out.println("Invalid input for Buy Price. Please enter a valid number.");
                     }
                 }
                 while (true) {
@@ -118,18 +122,17 @@ public class product_management_menu {
                         System.out.print("MSRP                : ");
                         p.MSRP = Float.parseFloat(console.nextLine());
                         if (p.MSRP < 0) {
-                            System.out.println("Invalid input for MSRP. Please enter a valid non-negative number.");
-                        } else {
-                            break;
+                            throw new NumberFormatException();
                         }
+                        break;
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid input for MSRP. Please enter a valid non-negative number.");
+                        System.out.println("Invalid input for MSRP. Please enter a valid number.");
                     }
                 }
-                
+
                 p.add_product();
                 break;
-            
+
             case 2:
                 // Updating a Record
                 System.out.println("Enter product information");
@@ -141,6 +144,7 @@ public class product_management_menu {
                 } else if (p.isProductDiscontinued()) {
                     System.out.println("Discontinued Products cannot be updated");
                 } else {
+                    System.out.println("-------------------------------------------------------------------");
                     System.out.println("Current Product information");
                     System.out.println("-------------------------------------------------------------------");
                     System.out.println("Product Code        : " + p.productCode);
@@ -152,6 +156,7 @@ public class product_management_menu {
                     System.out.println("Initial quantity    : " + p.quantityInStock);
                     System.out.println("Buy Price           : " + String.format("%.2f", p.buyPrice));
                     System.out.println("MSRP                : " + String.format("%.2f", p.MSRP));
+                    System.out.println("-------------------------------------------------------------------");
 
                     System.out.println("Enter updated product information");
                     System.out.println("-------------------------------------------------------------------");
@@ -161,7 +166,11 @@ public class product_management_menu {
                         System.out.print("Product Line        : ");
                         p.productLine = console.nextLine();
                         if (!p.isProductLineValid(p.productLine)) {
-                            System.out.println("Invalid Product Line. Valid options are: Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Buses, Vintage Cars");
+                            System.out.println("Invalid Product Line. Valid options are:");
+                            List<String> validProductLines = p.getValidProductLines();
+                            for (String productLine : validProductLines) {
+                                System.out.println(productLine);
+                            }
                         } else {
                             break;
                         }
@@ -184,10 +193,9 @@ public class product_management_menu {
                             System.out.print("Initial quantity    : ");
                             p.quantityInStock = Integer.parseInt(console.nextLine());
                             if (p.quantityInStock < 0) {
-                                System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
-                            } else {
-                                break;
+                                throw new NumberFormatException();
                             }
+                            break;
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid input for quantity. Please enter a non-negative integer.");
                         }
@@ -197,12 +205,11 @@ public class product_management_menu {
                             System.out.print("Buy Price           : ");
                             p.buyPrice = Float.parseFloat(console.nextLine());
                             if (p.buyPrice < 0) {
-                                System.out.println("Invalid input for Buy Price. Please enter a valid non-negative number.");
-                            } else {
-                                break;
+                                throw new NumberFormatException();
                             }
+                            break;
                         } catch (NumberFormatException e) {
-                            System.out.println("Invalid input for Buy Price. Please enter a valid non-negative number.");
+                            System.out.println("Invalid input for Buy Price. Please enter a valid number.");
                         }
                     }
                     while (true) {
@@ -210,37 +217,48 @@ public class product_management_menu {
                             System.out.print("MSRP                : ");
                             p.MSRP = Float.parseFloat(console.nextLine());
                             if (p.MSRP < 0) {
-                                System.out.println("Invalid input for MSRP. Please enter a valid non-negative number.");
-                            } else {
-                                break;
+                                throw new NumberFormatException();
                             }
+                            break;
                         } catch (NumberFormatException e) {
-                            System.out.println("Invalid input for MSRP. Please enter a valid non-negative number.");
+                            System.out.println("Invalid input for MSRP. Please enter a valid number.");
                         }
                     }
-                    
+
                     p.update_product();
                 }
                 break;
-                
+
             case 3:
                 System.out.println("Enter product information");
                 System.out.print("Product Code        : ");
-                p.productCode = console.nextLine();        
+                p.productCode = console.nextLine();
+                if (p.get_product() == 0) {
+                    System.out.println("This Product does not exist");
+                    return;
+                }
                 if (p.isProductDiscontinued()) {
                     System.out.println("Discontinued Products cannot be deleted");
-                } else {
-                    p.delete_product();
+                    return;
                 }
+                p.delete_product();
                 break;
-                
+
             case 4:
                 System.out.println("Enter product information");
                 System.out.print("Product Code        : ");
                 p.productCode = console.nextLine();
+                if (p.get_product() == 0) {
+                    System.out.println("This Product does not exist");
+                    return;
+                }
+                if (p.isProductDiscontinued()) {
+                    System.out.println("Product is already discontinued");
+                    return;
+                }
                 p.discontinue_product();
                 break;
-                
+
             case 5:
                 System.out.println("Enter product information");
                 System.out.print("Product Code        : ");
@@ -249,6 +267,7 @@ public class product_management_menu {
                 if (p.get_product() == 0) {
                     System.out.println("This Product does not exist");
                 } else {
+                    System.out.println("Current Product information");
                     System.out.println("-------------------------------------------------------------------");
                     System.out.println("Product Code        : " + p.productCode);
                     System.out.println("Product Name        : " + p.productName);
@@ -260,7 +279,6 @@ public class product_management_menu {
                     System.out.println("Buy Price           : " + String.format("%.2f", p.buyPrice));
                     System.out.println("MSRP                : " + String.format("%.2f", p.MSRP));
                     System.out.println("-------------------------------------------------------------------");
-                    
                     System.out.print("Enter the year to view orders: ");
                     int year = Integer.parseInt(console.nextLine());
                     p.get_product_orders(year);

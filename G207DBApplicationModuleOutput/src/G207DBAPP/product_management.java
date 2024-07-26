@@ -1,3 +1,4 @@
+
 package G207DBAPP;
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,6 +29,13 @@ public class product_management {
         buyPrice = 0;
         MSRP = 0;
     }
+    
+	// Algorithm when interacting with databases
+	// 1. Connect to the MYSQL Database
+	// 2. Preparing your SQL statement
+	// 3. Execute the SQL statement (if there are results, store it in a variable)
+	// 4. Close the SQL statement
+	// 5. Close the connection to the MYSQL Database
 
     // Method to get the list of valid product lines from the database
     public List<String> getValidProductLines() {
@@ -105,6 +113,13 @@ public class product_management {
                 return 0; // Invalid product scale format
             }
 
+            // Validate buy price, MSRP, and quantity in stock
+            if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
+                System.out.println("---------------------------------------------");
+                System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
+                return 0; // Invalid values
+            }
+
             // Prepare SQL statement to insert new product
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?)");
             pstmt.setString(1, productCode);
@@ -170,6 +185,13 @@ public class product_management {
                 System.out.println("---------------------------------------------");
                 System.out.println("Invalid Product Scale Format\n");
                 return 0; // Invalid product scale format
+            }
+
+            // Validate buy price, MSRP, and quantity in stock
+            if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
+                System.out.println("---------------------------------------------");
+                System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
+                return 0; // Invalid values
             }
 
             // Prepare SQL statement to update product
@@ -329,17 +351,6 @@ public class product_management {
                 quantityInStock = rs.getInt("quantityInStock");
                 buyPrice = rs.getFloat("buyPrice");
                 MSRP = rs.getFloat("MSRP");
-                System.out.println("---------------------------------------------");
-                System.out.println("Product Code        : " + productCode);
-                System.out.println("Product Name        : " + productName);
-                System.out.println("Product Line        : " + productLine);
-                System.out.println("Product Scale       : " + productScale);
-                System.out.println("Product Description : " + productDescription);
-                System.out.println("Product Vendor      : " + productVendor);
-                System.out.println("Initial quantity    : " + quantityInStock);
-                System.out.println("Buy Price           : " + String.format("%.2f", buyPrice));
-                System.out.println("MSRP                : " + String.format("%.2f", MSRP));
-                System.out.println("---------------------------------------------\n");
             }
 
             // Close statement and connection
