@@ -76,11 +76,4 @@ public class payment_transaction_menu {
         }
         return menuSelection;
     }
-
-    public static void main(String args[]) {
-        payment_transaction_menu ptm = new payment_transaction_menu();
-
-        while (ptm.menu() != 0) {
-        }
-    }
 }

@@ -164,13 +164,4 @@ public class customer_management_menu {
 		}
 		return menuSelection;
 	}
-	
-	public static void main(String args[]) {
-		customer_management_menu cmm = new customer_management_menu();
-		
-		while(cmm.menu() != 0) {
-			//it will continue
-		}
-		System.out.println("Exiting the Application!");
-	}
 }
