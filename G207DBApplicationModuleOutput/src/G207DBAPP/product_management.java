@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class product_management {
-	
+
     // Product attributes
     public String productCode;
     public String productName;
@@ -66,19 +66,13 @@ public class product_management {
         return productScale.matches("\\d+:\\d+");
     }
 
-    // Method to check if the product is discontinued - add fix
+    // Method to check if the product is discontinued
     public boolean isProductDiscontinued() {
         return productDescription.contains(" - DISCONTINUED");
     }
 
     // Method to add a new product to the database
     public int add_product() {
-        if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
-            System.out.println("---------------------------------------------");
-            System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
-            return 0; // Invalid values
-        }
-
         try {
             // Establish database connection
             Connection conn = DriverManager.getConnection(
@@ -140,12 +134,6 @@ public class product_management {
 
     // Method to update an existing product in the database
     public int update_product() {
-        if (buyPrice < 0 || MSRP < 0 || quantityInStock < 0) {
-            System.out.println("---------------------------------------------");
-            System.out.println("Buy Price, MSRP, and Quantity in Stock cannot be negative\n");
-            return 0; // Invalid values
-        }
-
         try {
             // Establish database connection
             Connection conn = DriverManager.getConnection(
@@ -156,7 +144,8 @@ public class product_management {
             PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            if (!checkRs.next()) {
+            checkRs.next();
+            if (checkRs.getRow() == 0) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
@@ -223,7 +212,8 @@ public class product_management {
             PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            if (!checkRs.next()) {
+            checkRs.next();
+            if (checkRs.getRow() == 0) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
@@ -279,7 +269,8 @@ public class product_management {
             PreparedStatement checkStmt = conn.prepareStatement("SELECT productDescription FROM products WHERE productCode=?");
             checkStmt.setString(1, productCode);
             ResultSet checkRs = checkStmt.executeQuery();
-            if (!checkRs.next()) {
+            checkRs.next();
+            if (checkRs.getRow() == 0) {
                 System.out.println("---------------------------------------------");
                 System.out.println("This Product does not exist\n");
                 return 0; // Product does not exist
