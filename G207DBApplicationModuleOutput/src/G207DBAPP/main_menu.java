@@ -63,7 +63,7 @@ public class main_menu {
                     break;
                     
                 case 6:
-                	payment_transacction_menu ptm = new payment_transaction_menu();
+                	payment_transaction_menu ptm = new payment_transaction_menu();
                 	ptm.menu();
                 	break;
                 // Implement other cases here if needed
